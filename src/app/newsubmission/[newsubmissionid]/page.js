@@ -1,7 +1,9 @@
 import Comments from "@/components/Comments";
+import DeleteButton from "@/components/DeleteButton";
 import Reactions from "@/components/Reactions";
 import { db } from "@/utils/dbConnection";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 //==================comment submission
 
@@ -31,6 +33,20 @@ async function handleReaction(formData) {
   revalidatePath(`/newsubmission/${formData.get("post_id")}`);
 }
 
+//=========delete Button
+async function deletePost(formData) {
+  "use server";
+
+  const postId = formData.get("post_id");
+  await db.query(`DELETE FROM uncluttrfeedcomments WHERE post_id=$1`, [postId]);
+  await db.query(`DELETE FROM uncluttrfeedreactions WHERE post_id=$1`, [
+    postId,
+  ]);
+  await db.query(`DELETE FROM uncluttrfeed WHERE id =$1`, [postId]);
+
+  redirect("/");
+}
+
 export default async function SubmissionId({ params }) {
   const { newsubmissionid } = await params;
 
@@ -57,11 +73,14 @@ export default async function SubmissionId({ params }) {
   //TODO: add reactions to individual post
 
   const reactiondata = await db.query(
-    `SELECT * from uncluttrfeedreactions WHERE post_id = $1 ORDER BY reacted_at`,
+    `SELECT reaction, COUNT(*) from uncluttrfeedreactions WHERE post_id=$1 GROUP BY reaction`,
     [newsubmissionid],
   );
+  // change array into object
 
-  const reactions = reactiondata.rows;
+  const reactions = Object.fromEntries(
+    reactiondata.rows.map((r) => [r.reaction, r.count]),
+  );
   console.log(reactions);
 
   return (
@@ -73,17 +92,13 @@ export default async function SubmissionId({ params }) {
         <h3>Category: {data.category}</h3>
         <p>Message: {data.message}</p>
         <p>Created at: {data.created_at.toLocaleString()}</p>
+        <DeleteButton postId={data.id} action={deletePost} />
       </section>
 
-      <section className="reaction_container">
-        <h2>Reactions</h2>
-        {reactions.length === 0 && <p>0 Likes and 0 celebrations</p>}
-        {reactions.map((reaction) => (
-          <div key={reaction.id} className="reaction">
-            <p>{reaction.reaction}</p>
-          </div>
-        ))}
-      </section>
+      <div className="reaction_container">
+        <p>{reactions.love || 0}</p>
+        <p>{reactions.celebrate || 0}</p>
+      </div>
       <Reactions postId={data.id} action={handleReaction} />
       <section className="comments_container">
         <h2>Comments</h2>

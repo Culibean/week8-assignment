@@ -13,7 +13,6 @@ export default function Reactions({ postId, action }) {
           ❤️
         </button>
       </form>
-      ;
     </>
   );
 }
