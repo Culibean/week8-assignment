@@ -23,7 +23,7 @@ export default function Reactions({ postId, action, counts = {} }) {
           name="reaction"
           value="love"
         >
-          ❤️ {counts.love || 2}
+          ❤️ {counts.love || 0}
         </button>
       </form>
     </>
