@@ -1,16 +1,29 @@
 "use client";
 
-export default function Reactions({ postId, action }) {
+import NavBarStyles from "./NavBar.module.css";
+import reactStyles from "./Reactions.module.css";
+
+export default function Reactions({ postId, action, counts = {} }) {
   return (
     <>
-      <form action={action}>
+      <form className={reactStyles.form} action={action}>
         <input type="hidden" name="post_id" value={postId} />
 
-        <button type="submit" name="reaction" value="celebrate">
-          🥳
+        <button
+          className={NavBarStyles.a}
+          type="submit"
+          name="reaction"
+          value="celebrate"
+        >
+          🥳 {counts.celebrate || 0}
         </button>
-        <button type="submit" name="reaction" value="love">
-          ❤️
+        <button
+          className={NavBarStyles.a}
+          type="submit"
+          name="reaction"
+          value="love"
+        >
+          ❤️ {counts.love || 2}
         </button>
       </form>
     </>

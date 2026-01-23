@@ -4,6 +4,7 @@ import Reactions from "@/components/Reactions";
 import { db } from "@/utils/dbConnection";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import idStyles from "./newsubmissionid.module.css";
 
 //==================comment submission
 
@@ -85,8 +86,8 @@ export default async function SubmissionId({ params }) {
 
   return (
     <>
-      <h1>More info</h1>
-      <section className="feed_card">
+      <h1 className={idStyles.h1}>More info</h1>
+      <section className={idStyles.feedcard}>
         <h2>Name: {data.username}</h2>
         <h3>Contact: {data.email}</h3>
         <h3>Category: {data.category}</h3>
@@ -95,18 +96,12 @@ export default async function SubmissionId({ params }) {
         <DeleteButton postId={data.id} action={deletePost} />
       </section>
 
-      <div className="reaction_container">
-        <p>{reactions.love || 0}</p>
-        <p>{reactions.celebrate || 0}</p>
-      </div>
-      <Reactions postId={data.id} action={handleReaction} />
-      <section className="comments_container">
-        <h2>Comments</h2>
-
+      <Reactions postId={data.id} action={handleReaction} counts={reactions} />
+      <section className={idStyles.comment}>
         {comments.length === 0 && <p>No comments yet</p>}
 
         {comments.map((comment) => (
-          <div key={comment.id} className="comment">
+          <div key={comment.id} className={idStyles.feedcard2}>
             <p>{comment.comment}</p>
             <p>by {comment.username}</p>
             <p>

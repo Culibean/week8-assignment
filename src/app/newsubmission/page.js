@@ -1,6 +1,7 @@
 import { db } from "@/utils/dbConnection";
 import { revalidatePath } from "next/cache";
 import { redirect, RedirectType } from "next/navigation";
+import newsubmissionStyles from "./newsubmission.module.css";
 
 export default function NewSubmission() {
   async function handleSubmit(formData) {
@@ -34,21 +35,39 @@ export default function NewSubmission() {
 
   return (
     <>
-      <h1>New Uncluttr Message Submission</h1>
-      <form action={handleSubmit}>
+      <h1 className={newsubmissionStyles.h1}>
+        New Uncluttr Message Submission
+      </h1>
+      <form className={newsubmissionStyles.newsubmit} action={handleSubmit}>
         <input type="hidden" name="user_id" value="1" />{" "}
-        <label htmlFor="username">
-          Uername
-          <input type="text" name="username" max={255} required></input>
+        <label className={newsubmissionStyles.label} htmlFor="username">
+          Username:
+          <input
+            className={newsubmissionStyles.input}
+            type="text"
+            name="username"
+            max={255}
+            required
+          ></input>
         </label>
-        <label htmlFor="email">
-          Email
-          <input type="email" name="email" required></input>
+        <label className={newsubmissionStyles.label} htmlFor="email">
+          Email:
+          <input
+            className={newsubmissionStyles.input}
+            type="email"
+            name="email"
+            required
+          ></input>
         </label>
-        <label htmlFor="category" name="category" required>
-          Category
-          <select name="category">
-            <option value="">Select a Category</option>
+        <label
+          className={newsubmissionStyles.label}
+          htmlFor="category"
+          name="category"
+          required
+        >
+          Category:
+          <select name="category" className={newsubmissionStyles.input}>
+            <option value="">Select a category</option>
             <option value="sale">For Sale</option>
             <option value="free">Free</option>
             <option value="help_needed">I need help</option>
@@ -58,16 +77,19 @@ export default function NewSubmission() {
             <option value="other">Other</option>
           </select>
         </label>
-        <label htmlFor="message">
+        <label className={newsubmissionStyles.label} htmlFor="message">
           Message:
           <input
+            className={newsubmissionStyles.input}
             type="text"
             name="message"
             required
             placeholder="write your message in here"
           ></input>
         </label>
-        <button type="submit">Submit</button>
+        <button className={newsubmissionStyles.button} type="submit">
+          Submit
+        </button>
       </form>
     </>
   );
