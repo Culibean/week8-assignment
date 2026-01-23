@@ -34,11 +34,11 @@ export default function Homepage() {
   return (
     <>
       <div className={DatabaseStyle.wrapper}>
-        <h2>Enter your username to see if you are already part of Uncluttr.</h2>
-        <h3>
-          If you are new here, you will be added to our database and can enjoy
-          Uncluttr for free!
-        </h3>
+        <h2 className={DatabaseStyle.h2}>
+          Enter your username to see if you are already part of Uncluttr. If you
+          are new here, you will be added to our database and can enjoy Uncluttr
+          for free!
+        </h2>
 
         <form className={DatabaseStyle.database} onSubmit={handleSubmit}>
           <label>
