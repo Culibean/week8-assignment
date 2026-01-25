@@ -7,6 +7,8 @@ export default function NewSubmission() {
   async function handleSubmit(formData) {
     "use server";
 
+    console.log(formData);
+
     const formValues = {
       user_id: formData.get("user_id"),
       username: formData.get("username"),
